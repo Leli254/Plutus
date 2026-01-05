@@ -48,7 +48,9 @@ async def worker_loop(name: Optional[str] = "default_worker"):
 
                 # Process each event sequentially (can be changed to asyncio.gather for concurrency)
                 for event_id in pending_event_ids:
-                    await process_raw_event(event_id, session, handler_name=name)
+                    await process_raw_event(
+                        event_id, session, handler_name=name
+                        )
 
             except Exception as e:
                 logger.error("worker.loop_error", error=str(e))
