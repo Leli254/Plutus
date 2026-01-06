@@ -1,0 +1,80 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# =========================
+# Pytest / Coverage
+# =========================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+
+# =========================
+# IDEs / Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+**/.dockerignore
+
+# =========================
+# Database / Migrations
+# =========================
+*.db
+alembic.ini.bak
+
+# =========================
+# Build artifacts
+# =========================
+dist/
+build/
+*.whl
+
+# =========================
+# Logs & runtime files
+# =========================
+logs/
+tmp/
+*.pid
+
+# =========================
+# Prometheus / Observability
+# =========================
+metrics/
+traces/
