@@ -19,114 +19,112 @@ A scalable, idempotent, async event ingestion and processing system built with F
 **Why idempotent?** Payment webhooks might retry; cannot double-charge customers
 
 ######  2. Financial Services & FinTech
-Use Case: Transaction processing & compliance monitoring
+**Use Case:** Transaction processing & compliance monitoring
 
-Events: transaction_initiated, card_swipe, transfer_requested, kyc_document_uploaded
+**Events:** transaction_initiated, card_swipe, transfer_requested, kyc_document_uploaded
 
-Processing:
+**Processing:**
 
-Real-time fraud detection (anomaly scoring across transaction patterns)
+- Real-time fraud detection (anomaly scoring across transaction patterns)
 
-Regulatory reporting (aggregate transactions for AML compliance)
+- Regulatory reporting (aggregate transactions for AML compliance)
 
-Balance updates (ensure exactly-once semantics)
+- Balance updates (ensure exactly-once semantics)
 
-Why idempotent? Duplicate transaction processing = financial loss/errors
+**Why idempotent?** Duplicate transaction processing = financial loss/errors
 
 ######  3. IoT & Telematics
-Use Case: Sensor data collection from vehicles/machines
+**Use Case:** Sensor data collection from vehicles/machines
 
-Events: engine_temperature:215°F, gps_location_update, fuel_level:42%
+**Events:** engine_temperature:215°F, gps_location_update, fuel_level:42%
 
-Processing:
+**Processing:**
 
-Predictive maintenance (analyze sensor patterns for failure prediction)
+- Predictive maintenance (analyze sensor patterns for failure prediction)
 
-Real-time fleet tracking & optimization
+- Real-time fleet tracking & optimization
 
-Usage-based insurance calculations
+- Usage-based insurance calculations
 
-Why async? Thousands of devices sending data simultaneously
+**Why async?** Thousands of devices sending data simultaneously
 
 ######  4. Gaming & Social Platforms
-Use Case: Player engagement & social graph updates
+**Use Case:** Player engagement & social graph updates
 
-Events: player_login, match_completed, friend_request_sent, in_game_purchase
+**Events:** player_login, match_completed, friend_request_sent, in_game_purchase
 
-Processing:
+**Processing:**
 
-Leaderboard updates (real-time ranking calculations)
+- Leaderboard updates (real-time ranking calculations)
 
-Anti-cheat detection (analyze gameplay patterns)
+- Anti-cheat detection (analyze gameplay patterns)
 
-Social feed updates (propagate friend activities)
+- Social feed updates (propagate friend activities)
 
-Why scalable? Millions of concurrent players during peak events
+**Why is it scalable?** Millions of concurrent players during peak events
 
 ######  5. Healthcare & Telemedicine
-Use Case: Patient monitoring & HIPAA-compliant data handling
+**Use Case:** Patient monitoring & HIPAA-compliant data handling
 
-Events: heart_rate_reading, medication_administered, doctor_notes_updated
+**Events:** heart_rate_reading, medication_administered, doctor_notes_updated
 
-Processing:
+**Processing:**
 
-Real-time alerting (abnormal vital signs)
+- Real-time alerting (abnormal vital signs)
 
-Care pathway compliance (ensure treatment protocols followed)
+- Care pathway compliance (ensure treatment protocols followed)
 
-Audit trail generation (for compliance)
+- Audit trail generation (for compliance)
 
-Why async SQL? Handle bursts of patient data during emergencies
+**Why async SQL?** Handle bursts of patient data during emergencies
 
 ######  6. AdTech & Marketing Platforms
-Use Case: Ad impression tracking & bid optimization
+**Use Case:** Ad impression tracking & bid optimization
 
-Events: ad_impression, click, conversion, viewability_measured
+**Events:** ad_impression, click, conversion, viewability_measured
 
-Processing:
+**Processing:**
 
-Real-time bidding decisions (process within 100ms latency budgets)
+- Real-time bidding decisions (process within 100ms latency budgets)
 
-Attribution modeling (which ad led to conversion?)
+- Attribution modeling (which ad led to conversion?)
 
-Budget pacing (spend ad budget evenly through day)
+- Budget pacing (spend ad budget evenly through the day)
 
-Why background workers? Heavy analytics don't block ad serving
+**Why background workers?** Heavy analytics don't block ad serving
 
 ######  7. Logistics & Supply Chain
-Use Case: Package tracking & route optimization
+**Use Case:** Package tracking & route optimization
 
-Events: package_scanned, location_update, temperature_breach, delivery_attempted
+**Events:** package_scanned, location_update, temperature_breach, delivery_attempted
 
-Processing:
+**Processing:**
 
-ETA predictions (machine learning on historical data)
+- ETA predictions (machine learning on historical data)
 
-Exception handling (reroute packages automatically)
+- Exception handling (reroute packages automatically)
 
-SLA monitoring (alert on delivery delays)
+- SLA monitoring (alert on delivery delays)
 
-Why observability? Debug why specific shipments were delayed
+**Why observability?** Debug why specific shipments were delayed
 
-8. SaaS Platform Analytics
-Use Case: Product usage tracking for B2B SaaS
+###### 8. SaaS Platform Analytics
+**Use Case:** Product usage tracking for B2B SaaS
 
-Events: feature_used, user_invited, dashboard_viewed, export_triggered
+**Events:** feature_used, user_invited, dashboard_viewed, export_triggered
 
-Processing:
+**Processing:**
 
-Customer health scoring (predict churn risk)
+- Customer health scoring (predict churn risk)
 
-Feature adoption metrics
+- Feature adoption metrics
 
-Usage-based billing calculations
+- Usage-based billing calculations
 
-Why clean architecture? Multiple teams adding new event types continuously
-
-
+**Why clean architecture?**  Multiple teams adding new event types continuously
 
 
-Repository Structure
+#### Repository Structure
 ingestor/
 ├── app/
 │   ├── api/                  # FastAPI routers
