@@ -2,6 +2,8 @@
 
 A scalable, idempotent, async event ingestion and processing system built with FastAPI, async SQLAlchemy, and background workers.
 
+## Example Use cas
+
 This project demonstrates mid-to-senior level Python backend engineering patterns, including:
 
 Idempotent ingestion
