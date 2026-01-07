@@ -125,6 +125,7 @@ A scalable, idempotent, async event ingestion and processing system built with F
 
 
 #### Repository Structure
+```
 ingestor/
 ├── app/
 │   ├── api/                  # FastAPI routers
@@ -151,6 +152,7 @@ ingestor/
 ├── pyproject.toml
 ├── README.md
 └── .gitignore
+```
 
 ### 🛠️ Tech Stack
 
