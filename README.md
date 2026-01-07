@@ -313,4 +313,8 @@ API → DB → Worker flow
 Run tests with:
 `pytest`
 
+## License
+
+This project is licensed under the MIT License.
+
 
