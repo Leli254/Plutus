@@ -1,6 +1,26 @@
 # Plutus
 
-A scalable, idempotent, async event ingestion and processing system built with FastAPI, async SQLAlchemy, and background workers.
+A scalable, idempotent, async event ingestion and processing system designed to reliably handle high-volume, retry-prone event streams using FastAPI, async SQLAlchemy, and background workers.
+
+## Core Design Guarantees
+
+Plutus is built around the following production guarantees:
+
+- **Idempotent ingestion**  
+  Duplicate events (e.g., webhook retries) are safely ignored using idempotency keys.
+
+- **At-least-once processing with safe retries**  
+  Events are processed asynchronously, and failures are recorded for inspection or retry.
+
+- **Non-blocking ingestion**  
+  API ingestion is decoupled from processing via background workers.
+
+- **Observability-first**  
+  Metrics and traces are emitted for ingestion, processing, and failures.
+
+- **Horizontal scalability**  
+  Multiple API instances and workers can be added without changing application logic.
+
 
 ## Example Use case:
 ###### 1. E-commerce & Retail Platforms
@@ -18,7 +38,7 @@ A scalable, idempotent, async event ingestion and processing system built with F
 
 **Why idempotent?** Payment webhooks might retry; cannot double-charge customers
 
-######  2. Financial Services & FinTech
+######  2.Financial Services & FinTech
 **Use Case:** Transaction processing & compliance monitoring
 
 **Events:** transaction_initiated, card_swipe, transfer_requested, kyc_document_uploaded
@@ -61,7 +81,7 @@ A scalable, idempotent, async event ingestion and processing system built with F
 
 - Social feed updates (propagate friend activities)
 
-**Why is it scalable?** Millions of concurrent players during peak events
+**Why scalability matters** Millions of concurrent players during peak events
 
 ######  5. Healthcare & Telemedicine
 **Use Case:** Patient monitoring & HIPAA-compliant data handling
@@ -124,15 +144,13 @@ A scalable, idempotent, async event ingestion and processing system built with F
 **Why clean architecture?**  Multiple teams adding new event types continuously
 
 ## Why These Systems Are Production-Critical
-- Revenue Impact: Duplicate payment processing = chargebacks & customer loss
 
-- Operational Efficiency: Real-time inventory prevents overselling
+- **Revenue impact:** Duplicate payment processing leads to chargebacks and customer loss
+- **Operational efficiency:** Real-time inventory prevents overselling
+- **Customer experience:** Personalization and low latency increase conversion
+- **Compliance:** Financial and healthcare data require strict audit trails
+- **Cost control:** Efficient async processing reduces infrastructure spend
 
-- Customer Experience: Personalized recommendations increase conversion
-
-- Compliance: Financial/healthcare data requires audit trails
-
-- Cost Control: Efficient processing reduces cloud infrastructure costs
 
 ## Production Examples from Known Companies
 - Uber: Processes billions of events (rides, payments, tracking) daily
@@ -154,9 +172,9 @@ Plutus/
 │   │   └── v1/
 │   ├── core/                 # App wiring & infrastructure
 │   ├── db/                   # Database layer
-│   ├── ingestion/            # Ingress use-cases
-│   ├── processing/           # Business logic
-│   ├── workers/              # Background workers
+│   ├── ingestion/            # Event validation & persistence
+│   ├── processing/           # Event handlers & business logic
+│   ├── workers/              # Long-running async consumers
 │   ├── observability/        # Metrics & tracing
 │   ├── main.py               # FastAPI entrypoint
 │   └── __init__.py
@@ -178,50 +196,54 @@ Plutus/
 
 ### 🛠️ Tech Stack
 
-Python 3.12
-
+**Language & Framework**
+- Python 3.12
 - FastAPI
+- Pydantic
 
+**Persistence**
+- PostgreSQL
 - SQLAlchemy (async)
 
-- PostgreSQL
+**Infrastructure**
+- Docker & Docker Compose
+- Poetry
 
+**Observability**
 - Prometheus
-
 - OpenTelemetry
 
-- Docker & Docker Compose
 
-Environment Variables
+### Environment Variables
 
-Create a .env file (or use environment injection):
+Create a .env file (or use environment injection), follow the structure provided in .example.env
 
-DATABASE_URL=postgresql+asyncpg://user:password@db:5432/ingestor
-ENV=local
-DEBUG=true
-METRICS_ENABLED=true
-TRACING_ENABLED=true
-
-Running the Project (Docker)
+### Running the Project (Docker)
 Build and start services
-docker compose up --build
+``docker compose up --build``
+> ⚠️ Ensure database migrations are applied before running workers.
+>
+> Example:
+> ```
+> docker compose exec api alembic upgrade head
+> ```
 
 
 This will start:
 
-API service (:8000)
+- API service (:8000)
 
-Background worker
+- Background worker
 
-PostgreSQL database
+- PostgreSQL database
 
-API Endpoints
+### API Endpoints
 Ingest Event
 POST /api/v1/ingest
 
 
 Example payload:
-
+```
 {
   "source": "payment_service",
   "schema_version": "1.0",
@@ -231,15 +253,16 @@ Example payload:
     "currency": "KES"
   }
 }
-
+```
 
 Response:
-
+```
 {
   "event_id": "550e8400-e29b-41d4-a716-446655440000"
 }
+```
 
-Metrics
+### Metrics
 
 Prometheus metrics are exposed at:
 
@@ -258,23 +281,22 @@ processing_success_total
 
 processing_failure_total
 
-Background Worker
+#### Background Worker
 
 The worker:
 
-Polls for RawEvent records with status RECEIVED
+- Polls for `RawEvent` records with status `RECEIVED`
+- Processes events asynchronously
+- Updates event status atomically
+- Records failures for inspection and retry
+- Supports graceful shutdown via SIGTERM
 
-Processes events sequentially (configurable)
-
-Updates status atomically
-
-Records failures for inspection and retry
 
 Run manually (outside Docker):
 
-python -m app.workers.consumer
+python -m workers.consumer
 
-Testing
+## Testing
 
 Recommended approach:
 
@@ -288,44 +310,7 @@ Integration tests for:
 
 API → DB → Worker flow
 
-pytest
+Run tests with:
+`pytest`
 
-Design Decisions (Why This Matters)
 
-Idempotency at DB level
-Guarantees correctness even under retries, crashes, or concurrency.
-
-Async everywhere
-Enables high-throughput ingestion with minimal resources.
-
-Workers over inline processing
-Keeps API fast and resilient.
-
-Observability built-in
-Production-grade systems must be measurable and traceable.
-
-Future Enhancements
-
-Queue-based workers (Kafka / RabbitMQ)
-
-Retry policies with backoff
-
-Dead-letter queue
-
-Schema validation per event type
-
-Horizontal worker scaling
-
-Authenticated ingestion
-
-Intended Audience
-
-This project is suitable for:
-
-Senior backend engineering interviews
-
-Architecture discussions
-
-Production-ready event ingestion services
-
-Portfolio demonstration of Python expertise
