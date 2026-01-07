@@ -123,6 +123,28 @@ A scalable, idempotent, async event ingestion and processing system built with F
 
 **Why clean architecture?**  Multiple teams adding new event types continuously
 
+## Why These Systems Are Production-Critical
+- Revenue Impact: Duplicate payment processing = chargebacks & customer loss
+
+- Operational Efficiency: Real-time inventory prevents overselling
+
+- Customer Experience: Personalized recommendations increase conversion
+
+- Compliance: Financial/healthcare data requires audit trails
+
+- Cost Control: Efficient processing reduces cloud infrastructure costs
+
+## Production Examples from Known Companies
+- Uber: Processes billions of events (rides, payments, tracking) daily
+
+- Netflix: Ingests viewing events for recommendations & content decisions
+
+- Airbnb: Handles booking events, search queries, and host interactions
+
+- Robinhood: Processes market data and trading events with strict idempotency
+
+- Shopify: Manages merchant events across thousands of stores
+
 
 #### Repository Structure
 ```
@@ -158,17 +180,17 @@ Plutus/
 
 Python 3.12
 
-FastAPI
+- FastAPI
 
-SQLAlchemy (async)
+- SQLAlchemy (async)
 
-PostgreSQL
+- PostgreSQL
 
-Prometheus
+- Prometheus
 
-OpenTelemetry
+- OpenTelemetry
 
-Docker & Docker Compose
+- Docker & Docker Compose
 
 Environment Variables
 
