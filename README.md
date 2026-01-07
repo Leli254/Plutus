@@ -6,7 +6,7 @@ A scalable, idempotent, async event ingestion and processing system built with F
 ###### 1. E-commerce & Retail Platforms
 **Use Case:** User behavior tracking & analytics
 
-**Events:** page_view, product_click, add_to_cart, checkout_started, payment_completed
+**Events:** `page_view, product_click, add_to_cart, checkout_started, payment_completed`
 
 **Processing:**
 
@@ -126,7 +126,7 @@ A scalable, idempotent, async event ingestion and processing system built with F
 
 #### Repository Structure
 ```
-ingestor/
+Plutus/
 ├── app/
 │   ├── api/                  # FastAPI routers
 │   │   └── v1/
