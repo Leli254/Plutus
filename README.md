@@ -4,19 +4,19 @@ A scalable, idempotent, async event ingestion and processing system built with F
 
 ## Example Use case:
 ###### 1. E-commerce & Retail Platforms
-Use Case: User behavior tracking & analytics
+**Use Case:** User behavior tracking & analytics
 
-Events: page_view, product_click, add_to_cart, checkout_started, payment_completed
+**Events:** page_view, product_click, add_to_cart, checkout_started, payment_completed
 
-Processing:
+**Processing:**
 
-Real-time recommendations ("Customers who viewed this also bought...")
+- Real-time recommendations ("Customers who viewed this also bought...")
 
-Inventory management (track cart abandonment vs. purchases)
+- Inventory management (track cart abandonment vs. purchases)
 
-Fraud detection (multiple rapid checkout attempts)
+- Fraud detection (multiple rapid checkout attempts)
 
-Why idempotent? Payment webhooks might retry; cannot double-charge customers
+**Why idempotent?** Payment webhooks might retry; cannot double-charge customers
 
 ######  2. Financial Services & FinTech
 Use Case: Transaction processing & compliance monitoring
