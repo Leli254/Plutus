@@ -5,8 +5,8 @@ from sqlalchemy import String, DateTime, Enum, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base
-from app.db.enums import EventStatus
+from db.base import Base
+from db.enums import EventStatus
 
 
 class RawEvent(Base):

@@ -1,93 +1,141 @@
-import asyncio
-from typing import Optional
+# workers/consumer.py
 
+import asyncio
+from typing import List, Optional
+
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.session import AsyncSessionLocal
-from app.db.models.raw_event import RawEvent
-from app.processing.service import process_raw_event
-from app.core.logging import get_logger
-from app.db.enums import EventStatus
-from app.observability.tracing import get_tracer
+from db.session import AsyncSessionLocal
+from db.models.raw_event import RawEvent
+from db.enums import EventStatus
+from processing.service import process_raw_event
+
+from app.core.config import get_settings
+from app.core.logging import configure_logging, get_logger
+from observability.tracing import setup_tracing, get_tracer
 
 logger = get_logger("worker.consumer")
-tracer = get_tracer()
 
-BATCH_SIZE = 10           # Number of events to fetch per batch
-POLL_INTERVAL = 2         # Seconds to wait if no pending events
+BATCH_SIZE = 10
+POLL_INTERVAL = 2  # seconds
+ERROR_BACKOFF = 5  # seconds
 
 
-async def fetch_pending_events(session: AsyncSession, limit: int = BATCH_SIZE):
+# =========================
+# Database access
+# =========================
+
+async def fetch_pending_events(
+    session: AsyncSession,
+    limit: int = BATCH_SIZE,
+) -> List[int]:
     """
-    Fetch a batch of pending raw events (status = RECEIVED)
+    Fetch IDs of pending raw events.
     """
-    result = await session.execute(
-        RawEvent.__table__.select()
+    stmt = (
+        select(RawEvent.id)
         .where(RawEvent.status == EventStatus.RECEIVED)
         .limit(limit)
     )
-    return [row.id for row in result.fetchall()]
+
+    result = await session.execute(stmt)
+    return [row[0] for row in result.all()]
 
 
-async def worker_loop(name: Optional[str] = "default_worker"):
+# =========================
+# Processing
+# =========================
+
+async def process_batch(
+    worker_name: str,
+    event_ids: List[int],
+) -> None:
     """
-    Main worker loop:
-    - Continuously polls for pending events
-    - Processes them asynchronously
-    - Sleeps if no events found
+    Process events one-by-one using isolated DB sessions.
     """
-    logger.info("worker.started", worker=name)
+    tracer = get_tracer()
 
-    # ---- LONG-LIVED WORKER SPAN ----
-    with tracer.start_as_current_span("worker_loop") as worker_span:
-        worker_span.set_attribute("worker.name", name)
+    for event_id in event_ids:
+        with tracer.start_as_current_span("worker.process_event") as span:
+            span.set_attribute("worker.name", worker_name)
+            span.set_attribute("raw_event.id", event_id)
 
-        while True:
             async with AsyncSessionLocal() as session:
-                try:
-                    pending_event_ids = await fetch_pending_events(session)
+                await process_raw_event(
+                    event_id=event_id,
+                    session=session,
+                    handler_name=worker_name,
+                )
 
-                    worker_span.set_attribute(
-                        "batch.size",
-                        len(pending_event_ids),
-                    )
 
-                    if not pending_event_ids:
-                        await asyncio.sleep(POLL_INTERVAL)
-                        continue
+# =========================
+# Worker loop
+# =========================
 
-                    for event_id in pending_event_ids:
-                        # ---- PER-EVENT CHILD SPAN ----
-                        with tracer.start_as_current_span(
-                            "worker.process_event"
-                        ) as event_span:
-                            event_span.set_attribute("worker.name", name)
-                            event_span.set_attribute(
-                                "raw_event.id",
-                                str(event_id),
-                            )
+async def worker_loop(worker_name: str) -> None:
+    """
+    Long-running worker loop (Option A).
+    """
+    tracer = get_tracer()
 
-                            await process_raw_event(
-                                event_id,
-                                session,
-                                handler_name=name,
-                            )
+    logger.info("worker.started", worker=worker_name)
 
-                except Exception as e:
-                    worker_span.record_exception(e)
-                    logger.error("worker.loop_error", error=str(e))
+    while True:
+        try:
+            with tracer.start_as_current_span("worker.poll") as poll_span:
+                poll_span.set_attribute("worker.name", worker_name)
+
+                async with AsyncSessionLocal() as session:
+                    event_ids = await fetch_pending_events(session)
+                    poll_span.set_attribute("batch.size", len(event_ids))
+
+                if not event_ids:
                     await asyncio.sleep(POLL_INTERVAL)
+                    continue
+
+                await process_batch(
+                    worker_name=worker_name,
+                    event_ids=event_ids,
+                )
+
+        except asyncio.CancelledError:
+            logger.info("worker.cancelled", worker=worker_name)
+            raise
+
+        except Exception as exc:
+            logger.exception(
+                "worker.loop_error",
+                worker=worker_name,
+                error=str(exc),
+            )
+            await asyncio.sleep(ERROR_BACKOFF)
 
 
-def start_worker(name: Optional[str] = "default_worker"):
+# =========================
+# Entrypoint
+# =========================
+
+def run_worker(name: Optional[str] = None) -> None:
     """
-    Entrypoint for running worker.
-    Can be invoked via CLI, Docker container, or Celery-like integration.
+    Entrypoint for Docker / CLI.
     """
+    configure_logging()
+    settings = get_settings()
+
+    worker_name = name or "default_worker"
+
+    if settings.tracing_enabled:
+        setup_tracing(
+            service_name=f"{settings.service_name}-worker",
+            otlp_endpoint=settings.otlp_endpoint,
+        )
+
     try:
-        asyncio.run(worker_loop(name=name))
+        asyncio.run(worker_loop(worker_name))
     except KeyboardInterrupt:
-        logger.info("worker.stopped", worker=name)
-        logger.info("worker.exited", worker=name)
-    except Exception as e:
-        logger.error("worker.fatal_error", error=str(e))
+        logger.info("worker.stopped", worker=worker_name)
+
+
+if __name__ == "__main__":
+    run_worker()

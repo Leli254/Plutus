@@ -1,30 +1,32 @@
 FROM python:3.12-slim
 
-# Prevent Python from writing pyc files and enable stdout logging
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV POETRY_VIRTUALENVS_CREATE=false
 
-# System dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Working directory inside container
 WORKDIR /app
 
-# Install Python dependencies first (layer caching)
-COPY pyproject.toml .
+# Copy dependency definitions only
+COPY pyproject.toml poetry.lock* ./
+
+# Install Poetry + export plugin
 RUN pip install --upgrade pip \
-    && pip install .
+    && pip install poetry poetry-plugin-export
 
-# Copy application code
-COPY app ./app
-COPY migrations ./migrations
+# Export dependencies and install via pip
+RUN poetry export -f requirements.txt --without-hashes -o requirements.txt \
+    && pip install -r requirements.txt \
+    && rm requirements.txt
 
-# Expose FastAPI port
+# Copy application code (root-level main.py preserved)
+COPY . .
+
 EXPOSE 8000
 
-# Run FastAPI
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "main.py"]

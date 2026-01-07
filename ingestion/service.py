@@ -2,12 +2,12 @@ import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 
-from app.ingestion.idempotency import (
+from ingestion.idempotency import (
     get_or_create_raw_event, IdempotencyResult
     )
-from app.ingestion.schemas import IngestRequest
+from ingestion.schemas import IngestRequest
 from app.core.logging import get_logger
-from app.observability.tracing import get_tracer
+from observability.tracing import get_tracer
 
 logger = get_logger("ingestion.service")
 tracer = get_tracer()

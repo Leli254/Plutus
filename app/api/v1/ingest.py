@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
 from app.core.security import api_key_auth
-from app.ingestion.schemas import IngestRequest, IngestResponse
-from app.ingestion.service import ingest_event
+from ingestion.schemas import IngestRequest, IngestResponse
+from ingestion.service import ingest_event
+
 
 router = APIRouter(
     prefix="/ingest",

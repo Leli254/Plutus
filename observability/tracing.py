@@ -1,3 +1,8 @@
+# observability/tracing.py
+
+from typing import Optional
+
+from fastapi import FastAPI
 from opentelemetry import trace
 from opentelemetry.trace import Tracer
 from opentelemetry.sdk.resources import Resource
@@ -10,48 +15,79 @@ from opentelemetry.sdk.trace.export import (
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.asgi import OpenTelemetryMiddleware
-from fastapi import FastAPI
 
-tracer: Tracer | None = None
+# ---- INTERNAL STATE ----
+_tracer: Optional[Tracer] = None
+_initialized: bool = False
 
 
-def setup_tracing(app: FastAPI, service_name: str = "ingestor-service", otlp_endpoint: str | None = None):
+def setup_tracing(
+    app: Optional[FastAPI] = None,
+    *,
+    service_name: str = "plutus",
+    otlp_endpoint: Optional[str] = None,
+) -> Tracer:
     """
-    Initialize OpenTelemetry tracing for FastAPI + async workers.
+    Initialize OpenTelemetry tracing.
 
-    - Automatically instruments HTTP requests
-    - Adds a tracer for manual spans
-    - Can export to OTLP/Jaeger/Console
+    Can be safely called:
+    - from FastAPI startup
+    - from worker entrypoints
+    - multiple times (idempotent)
+
+    Parameters:
+        app: FastAPI app (optional, only for HTTP instrumentation)
+        service_name: logical service name
+        otlp_endpoint: optional OTLP collector endpoint
     """
 
-    global tracer
+    global _tracer, _initialized
 
-    # 1. Configure TracerProvider
-    resource = Resource.create(attributes={"service.name": service_name})
+    if _initialized:
+        return _tracer  # type: ignore
+
+    # ---- Resource ----
+    resource = Resource.create(
+        attributes={"service.name": service_name}
+    )
+
+    # ---- Tracer Provider ----
     provider = TracerProvider(resource=resource)
     trace.set_tracer_provider(provider)
 
-    # 2. Add exporters
-    # Console exporter (dev/debug)
-    provider.add_span_processor(SimpleSpanProcessor(ConsoleSpanExporter()))
+    # ---- Exporters ----
+    provider.add_span_processor(
+        SimpleSpanProcessor(ConsoleSpanExporter())
+    )
 
-    # Optional: OTLP exporter (Jaeger/Collector)
     if otlp_endpoint:
-        otlp_exporter = OTLPSpanExporter(endpoint=otlp_endpoint)
-        provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+        provider.add_span_processor(
+            BatchSpanProcessor(
+                OTLPSpanExporter(endpoint=otlp_endpoint)
+            )
+        )
 
-    # 3. Get global tracer
-    tracer = trace.get_tracer(service_name)
+    # ---- Tracer ----
+    _tracer = trace.get_tracer(service_name)
+    _initialized = True
 
-    # 4. Instrument FastAPI automatically
-    FastAPIInstrumentor.instrument_app(app)
-    app.add_middleware(OpenTelemetryMiddleware)
+    # ---- FastAPI Instrumentation ----
+    if app is not None:
+        FastAPIInstrumentor.instrument_app(app)
+        app.add_middleware(OpenTelemetryMiddleware)
 
-    return tracer
+    return _tracer
 
 
 def get_tracer() -> Tracer:
-    if tracer is None:
-        raise RuntimeError(
-            "Tracer not initialized. Call setup_tracing(app) first.")
-    return tracer
+    """
+    Safe tracer accessor.
+
+    - Never raises
+    - Returns a no-op tracer if tracing is not initialized
+    """
+    if _tracer is not None:
+        return _tracer
+
+    # Return a NOOP tracer instead of crashing
+    return trace.get_tracer("noop")

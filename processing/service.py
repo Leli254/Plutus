@@ -5,13 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.db.models.raw_event import RawEvent
-from app.db.models.processed_event import ProcessedEvent
-from app.db.models.failed_event import FailedEvent
-from app.db.enums import EventStatus
+from db.models.raw_event import RawEvent
+from db.models.processed_event import ProcessedEvent
+from db.models.failed_event import FailedEvent
+from db.enums import EventStatus
 from app.core.logging import get_logger
-from app.observability.tracing import get_tracer
-from app.observability.metrics import (
+from observability.tracing import get_tracer
+from observability.metrics import (
     track_processed_event,
     track_failed_event,
 )

@@ -1,37 +1,41 @@
-[project]
+[tool.poetry]
 name = "plutus"
 version = "0.1.0"
 description = "Async event ingestion and processing system"
-authors = [
-    {name = "Michael Leli",email = "lelisoftware@gmail.com"}
-]
-license = {text = "MIT"}
+authors = ["Michael Leli <lelisoftware@gmail.com>"]
+license = "MIT"
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "fastapi[all] (>=0.128.0,<0.129.0)",
-    "uvicorn (>=0.40.0,<0.41.0)",
-    "sqlalchemy (>=2.0.45,<3.0.0)",
-    "asyncpg (>=0.31.0,<0.32.0)",
-    "alembic (>=1.17.2,<2.0.0)",
-    "pydantic (>=2.12.5,<3.0.0)",
-    "python-dotenv (>=1.2.1,<2.0.0)",
-    "prometheus-client (>=0.23.1,<0.24.0)",
-    "opentelemetry-api (>=1.39.1,<2.0.0)",
-    "opentelemetry-sdk (>=1.39.1,<2.0.0)",
-    "opentelemetry-instrumentation-fastapi (>=0.60b1,<0.61)"
+packages = [
+    { include = "app" }
 ]
 
+[tool.poetry.dependencies]
+python = ">=3.12"
+fastapi = { version = ">=0.128.0,<0.129.0", extras = ["all"] }
+uvicorn = ">=0.40.0,<0.41.0"
+sqlalchemy = ">=2.0.45,<3.0.0"
+asyncpg = ">=0.31.0,<0.32.0"
+alembic = ">=1.17.2,<2.0.0"
+pydantic = ">=2.12.5,<3.0.0"
+python-dotenv = ">=1.2.1,<2.0.0"
+prometheus-client = ">=0.23.1,<0.24.0"
+opentelemetry-api = ">=1.39.1,<2.0.0"
+opentelemetry-sdk = ">=1.39.1,<2.0.0"
+opentelemetry-instrumentation-fastapi = ">=0.60b1,<0.61"
+structlog = "^25.5.0"
+opentelemetry-exporter-otlp = "^1.39.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=9.0.2,<10.0.0"
+pytest-asyncio = ">=1.3.0,<2.0.0"
+black = ">=25.12.0,<26.0.0"
+isort = ">=7.0.0,<8.0.0"
+mypy = ">=1.19.1,<2.0.0"
+
+[tool.poetry.scripts]
+start-api = "main:run_api"
+start-worker = "workers.consumer:run_worker"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[dependency-groups]
-dev = [
-    "pytest (>=9.0.2,<10.0.0)",
-    "pytest-asyncio (>=1.3.0,<2.0.0)",
-    "black (>=25.12.0,<26.0.0)",
-    "isort (>=7.0.0,<8.0.0)",
-    "mypy (>=1.19.1,<2.0.0)"
-]

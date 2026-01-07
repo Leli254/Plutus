@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 
-from app.db.session import get_db_session
-from app.processing.service import process_raw_event
-from app.db.models.raw_event import RawEvent
+from db.session import get_db_session
+from processing.service import process_raw_event
+from db.models.raw_event import RawEvent
 
 router = APIRouter(prefix="/processing", tags=["processing"])
 

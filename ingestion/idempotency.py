@@ -5,8 +5,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models.raw_event import RawEvent
-from app.db.enums import EventStatus
+from db.models.raw_event import RawEvent
+from db.enums import EventStatus
 
 
 class IdempotencyResult:
