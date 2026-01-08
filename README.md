@@ -23,6 +23,7 @@ Plutus is built around the following production guarantees:
 
 
 ## Example Use case:
+
 ###### 1. E-commerce & Retail Platforms
 **Use Case:** User behavior tracking & analytics
 
