@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Python dependencies via Poetry
+  - package-ecosystem: "poetry"
+    directory: "/"       # Root of the repository
+    schedule:
+      interval: "weekly" # Check for updates weekly
+    commit-message:
+      prefix: "deps"
+    open-pull-requests-limit: 10
+    # Optional: ignore certain packages if needed
+    # ignore:
+    #   - dependency-name: "some-package"
+    #     versions: ["*"]
+
+  # GitHub Actions workflow updates
+  - package-ecosystem: "github-actions"
+    directory: "/"       # Root of repository
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    open-pull-requests-limit: 5
