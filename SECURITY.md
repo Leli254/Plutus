@@ -1,101 +1,109 @@
-
 # Security Policy
 
 ## Overview
 
-Plutus is an event ingestion and processing system designed to handle
-high-volume, asynchronous, and idempotent workloads. Because it operates
-as infrastructure and processes potentially sensitive data, security is
-taken seriously.
+Plutus is an open-source event ingestion and processing system intended
+to be deployed as infrastructure within larger platforms.
 
-This document outlines how to report security vulnerabilities and how they are handled.
+While Plutus aims to follow security best practices, no software is
+guaranteed to be free of vulnerabilities. This document describes how
+to report security issues responsibly.
 
 ---
 
 ## Supported Versions
 
-Security fixes are applied to the **latest released version** of Plutus.
+Security fixes are provided for the **latest released version** of Plutus.
 
-Older versions may not receive security updates.
+Users are encouraged to stay up to date, as older versions may not
+receive security patches.
 
 | Version | Supported |
 |--------|-----------|
-| Latest | ✅ |
-| Older | ❌ |
+| Latest release | ✅ |
+| Older releases | ❌ |
 
 ---
 
-## Reporting a Vulnerability
+## Reporting Security Issues
 
-If you discover a security vulnerability, **do not open a public GitHub issue**.
+If you believe you have found a security vulnerability, **please do not
+open a public issue**.
 
-Instead, please report it responsibly using one of the methods below.
+Instead, report the issue privately so it can be addressed responsibly.
 
-### Preferred Method
-- Email: **lelisoftware[at]gmail.com**  
+### Preferred Reporting Method
 
-### Alternative (GitHub)
-- Open a **private security advisory** via GitHub Security Advisories
+- Email: **lelisoftware[at]gmail.com**
+
+
+### GitHub Security Advisories
+
+Alternatively, you may use GitHub’s **private security advisory**
+feature to report vulnerabilities.
 
 ---
 
-## What to Include in a Report
+## What to Include
 
-Please include as much detail as possible:
+When reporting a vulnerability, please include:
 
-- Description of the vulnerability
-- Affected component(s)
-- Steps to reproduce
+- A clear description of the issue
+- Affected components or files
+- Steps to reproduce (if applicable)
 - Potential impact
-- Any proof-of-concept code (if available)
+- Any relevant logs, stack traces, or proof-of-concept details
 
-Clear, actionable reports help us respond faster.
+Incomplete reports may delay triage.
 
 ---
 
-## Response Process
+## Response Expectations
 
-Once a report is received:
+We aim to:
 
-1. We will acknowledge receipt within **72 hours**
-2. The issue will be assessed and validated
-3. A fix or mitigation will be developed
-4. A security release or advisory will be issued if necessary
+- Acknowledge valid reports within **72 hours**
+- Investigate and assess the reported issue
+- Determine an appropriate fix or mitigation
+- Release a patch or advisory when warranted
 
-Timelines may vary depending on severity and complexity.
+Response timelines may vary based on severity, complexity, and maintainer availability.
 
 ---
 
 ## Disclosure Policy
 
-We follow **responsible disclosure** practices:
+Plutus follows **responsible disclosure** practices:
 
-- Vulnerabilities are not disclosed publicly until a fix or mitigation is available
-- Credit may be given to reporters upon request
+- Security issues should not be publicly disclosed before a fix or mitigation is available
+- Reporters may be credited unless anonymity is requested
 - Coordinated disclosure is encouraged
-
----
-
-## Security Best Practices (Users)
-
-If you deploy Plutus in production:
-
-- Secure database credentials and environment variables
-- Restrict network access to internal services
-- Use TLS for all external communication
-- Monitor logs and metrics for abnormal behavior
-- Keep dependencies up to date
 
 ---
 
 ## Scope
 
 This security policy applies to:
-- Core ingestion and processing logic
-- Worker execution
-- Database interactions
-- Observability integrations
 
-It does not cover:
-- Third-party services
-- Infrastructure misconfiguration outside the application
+- Core ingestion and processing logic
+- Background worker execution
+- Database interactions
+- Observability and instrumentation code
+
+This policy does **not** cover:
+
+- Third-party dependencies or services
+- Deployment-specific misconfigurations
+- Infrastructure, networking, or cloud provider security
+
+---
+
+## Security Guidance for Deployments
+
+Operators deploying Plutus in production should:
+
+- Protect secrets using environment variables or secret managers
+- Restrict network access to trusted services
+- Use TLS for all external communication
+- Monitor logs and metrics for abnormal behavior
+- Keep dependencies and base images up to date
