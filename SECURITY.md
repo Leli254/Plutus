@@ -211,3 +211,38 @@ Plutus follows a **defense-in-depth** approach:
 - Isolate processing responsibilities
 - Prefer safe defaults over configurability
 
+---
+
+## Security FAQ
+
+### Is Plutus secure by default?
+Plutus is designed to be secure **by design**, but it is an infrastructure
+component and must be deployed within a secure environment.
+Network security, secret management, and access control are the responsibility
+of the operator.
+
+---
+
+### Does Plutus store sensitive data?
+Plutus stores raw event payloads as provided by upstream systems.
+Operators are responsible for ensuring that sensitive or regulated data
+is handled in accordance with applicable policies and regulations.
+
+---
+
+### Are events encrypted at rest or in transit?
+Plutus relies on the database and deployment environment for encryption.
+TLS, disk encryption, and credential rotation should be configured externally.
+
+---
+
+### How are duplicate or replayed events handled?
+Plutus enforces idempotency at the database level using idempotency keys
+and atomic state transitions to prevent duplicate processing.
+
+---
+
+### What should I do if I find a vulnerability?
+Please report vulnerabilities using GitHub’s private security advisory workflow.
+Do not open public issues for security-related reports.
+
