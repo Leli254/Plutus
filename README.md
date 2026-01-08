@@ -325,6 +325,23 @@ Run tests with:
 
 ---
 
+## Security Configuration Guidance
+
+Plutus is intended to run as a trusted internal service.
+For production deployments, the following practices are recommended:
+
+- Run the API behind a reverse proxy or API gateway
+- Enable TLS termination at the edge
+- Restrict database access to internal networks only
+- Store secrets (database URLs, credentials) in a secure secret manager
+- Avoid logging raw event payloads in production
+- Limit access to `/metrics` endpoints to trusted monitoring systems
+
+Plutus does not implement authentication or authorization by default.
+These concerns should be handled at the infrastructure or gateway level.
+
+---
+
 ## 🤝 Contributing
 Contributions are welcome! Please read [CONTRIBUTING.md](https://github.com/Leli254/Plutus/?tab=contributing-ov-file)
 
@@ -333,6 +350,8 @@ Contributions are welcome! Please read [CONTRIBUTING.md](https://github.com/Leli
 3. Commit your Changes (git commit -m 'Add some AmazingFeature')
 4. Push to the Branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
+
+---
 
 ## License
 
