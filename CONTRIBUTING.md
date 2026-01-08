@@ -122,7 +122,7 @@ Please follow these guidelines:
 
 - New features requiring schema changes must include migrations
 
-### Testing
+## Testing
 
 
 ###### Required Tests
@@ -148,6 +148,45 @@ Run tests with:
 > pytest
 
 ---
+
+### Observability Expectations
+
+When adding new processing logic:
+
+- Add structured logs
+
+- Add Prometheus metrics where meaningful
+
+- Add OpenTelemetry spans for non-trivial workflows
+
+Observability is a **first-class concern** in this project.
+
+---
+
+## Pull Request Process
+
+1. Fork the repository
+
+2. Create a feature branch
+
+3. Make your changes
+
+4. Ensure tests pass
+
+5. Open a Pull Request against `main`
+
+Your PR description should include:
+
+- What changed
+
+- Why it changed
+
+- Any breaking changes
+
+- How it was tested
+
+---
+
 
 
 
