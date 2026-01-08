@@ -132,7 +132,8 @@ Plutus is built around the following production guarantees:
 ###### 8. SaaS Platform Analytics
 **Use Case:** Product usage tracking for B2B SaaS
 
-**Events:** >feature_used, user_invited, dashboard_viewed, export_triggered
+**Events:** 
+> feature_used, user_invited, dashboard_viewed, export_triggered
 
 **Processing:**
 
