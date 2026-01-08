@@ -1,7 +1,7 @@
 # Contributing to Plutus
 
 Thank you for your interest in contributing to **Plutus**.  
-Contributions of all kinds are welcome — bug reports, feature requests, documentation improvements, and code contributions.
+Contributions of all kinds are welcome — *bug reports, feature requests, documentation improvements, and code contributions*.
 
 This document outlines the process and expectations for contributing.
 
@@ -73,6 +73,8 @@ This will start:
 
 - Prometheus
 
+---
+
 ### Branching Strategy
 
 main → stable branch
@@ -89,6 +91,8 @@ Example:
 feature/idempotency-retry-policy
 fix/worker-shutdown
 ```
+---
+
 ### Coding Standards
 
 Please follow these guidelines:
@@ -105,7 +109,10 @@ Please follow these guidelines:
 
 - Use type hints consistently
 
+---
+
 ### Formatting & Style
+
 - Follow PEP 8
 
 - Use black for formatting
@@ -114,6 +121,8 @@ Please follow these guidelines:
 
 - Write meaningful commit messages
 
+---
+
 ## Database & Migrations
 
 - All schema changes must go through Alembic migrations
@@ -121,6 +130,8 @@ Please follow these guidelines:
 - Do not modify existing migrations
 
 - New features requiring schema changes must include migrations
+
+---
 
 ## Testing
 
@@ -187,6 +198,18 @@ Your PR description should include:
 
 ---
 
+### License
 
+By contributing to this project, you agree that your contributions will be licensed under the **MIT License**.
+
+---
+
+### Questions?
+
+
+If you’re unsure about anything, feel free to open a discussion or issue.
+We value thoughtful contributions and constructive collaboration.
+
+Thank you for contributing to **Plutus**.
 
 
