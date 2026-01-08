@@ -1,0 +1,13 @@
+# Security-sensitive areas
+/app/db/              @Leli254
+/app/processing/      @Leli254
+/app/workers/         @Leli254
+/app/observability/   @Leli254
+/app/core/            @Leli254
+
+# Infrastructure
+/docker/              @Leli254
+/docker-compose.yml   @Leli254
+
+# Default
+*                     @Leli254
