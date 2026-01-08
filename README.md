@@ -325,6 +325,20 @@ Run tests with:
 
 ---
 
+## Abuse & Rate Limiting
+
+Plutus does not include built-in rate limiting or abuse prevention.
+
+It is expected that deployments enforce request limits at the edge
+(e.g. API gateways, load balancers, or reverse proxies).
+
+This design allows Plutus to remain focused on ingestion correctness
+and processing reliability while deferring traffic control to
+infrastructure better suited for that role.
+
+
+---
+
 ## Security Configuration Guidance
 
 Plutus is intended to run as a trusted internal service.
