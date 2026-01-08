@@ -61,4 +61,47 @@ Please include:
 git clone https://github.com/<your-username>/plutus.git
 cd plutus
 docker compose up --build
+```
+
+This will start:
+
+- API service
+
+- Background worker
+
+- PostgreSQL
+
+- Prometheus
+
+### Branching Strategy
+
+main → stable branch
+
+Create feature branches off main
+
+```bash
+feature/<short-description>
+fix/<short-description>
+```
+Example:
+
+```bash
+feature/idempotency-retry-policy
+fix/worker-shutdown
+```
+### Coding Standards
+
+Please follow these guidelines:
+
+- Prefer clarity over cleverness
+
+- Write async-safe code
+
+- Avoid long-lived DB sessions in workers
+
+- Ensure idempotency is preserved
+
+- Keep functions small and single-purpose
+
+- Use type hints consistently
 
