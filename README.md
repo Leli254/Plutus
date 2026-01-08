@@ -27,7 +27,7 @@ Plutus is built around the following production guarantees:
 ###### 1. E-commerce & Retail Platforms
 **Use Case:** User behavior tracking & analytics
 
-**Events:** `page_view, product_click, add_to_cart, checkout_started, payment_completed`
+**Events:** > page_view, product_click, add_to_cart, checkout_started, payment_completed.
 
 **Processing:**
 
@@ -42,7 +42,7 @@ Plutus is built around the following production guarantees:
 ######  2.Financial Services & FinTech
 **Use Case:** Transaction processing & compliance monitoring
 
-**Events:** transaction_initiated, card_swipe, transfer_requested, kyc_document_uploaded
+**Events:** > transaction_initiated, card_swipe, transfer_requested, kyc_document_uploaded
 
 **Processing:**
 
@@ -55,9 +55,9 @@ Plutus is built around the following production guarantees:
 **Why idempotent?** Duplicate transaction processing = financial loss/errors
 
 ######  3. IoT & Telematics
-**Use Case:** Sensor data collection from vehicles/machines
+**Use Case:** > Sensor data collection from vehicles/machines
 
-**Events:** engine_temperature:215°F, gps_location_update, fuel_level:42%
+**Events:** > engine_temperature:215°F, gps_location_update, fuel_level:42%
 
 **Processing:**
 
@@ -72,7 +72,7 @@ Plutus is built around the following production guarantees:
 ######  4. Gaming & Social Platforms
 **Use Case:** Player engagement & social graph updates
 
-**Events:** player_login, match_completed, friend_request_sent, in_game_purchase
+**Events:** > player_login, match_completed, friend_request_sent, in_game_purchase
 
 **Processing:**
 
@@ -87,7 +87,7 @@ Plutus is built around the following production guarantees:
 ######  5. Healthcare & Telemedicine
 **Use Case:** Patient monitoring & HIPAA-compliant data handling
 
-**Events:** heart_rate_reading, medication_administered, doctor_notes_updated
+**Events:** > heart_rate_reading, medication_administered, doctor_notes_updated
 
 **Processing:**
 
@@ -102,7 +102,7 @@ Plutus is built around the following production guarantees:
 ######  6. AdTech & Marketing Platforms
 **Use Case:** Ad impression tracking & bid optimization
 
-**Events:** ad_impression, click, conversion, viewability_measured
+**Events:** > ad_impression, click, conversion, viewability_measured
 
 **Processing:**
 
@@ -117,7 +117,7 @@ Plutus is built around the following production guarantees:
 ######  7. Logistics & Supply Chain
 **Use Case:** Package tracking & route optimization
 
-**Events:** package_scanned, location_update, temperature_breach, delivery_attempted
+**Events:** > package_scanned, location_update, temperature_breach, delivery_attempted
 
 **Processing:**
 
@@ -132,7 +132,7 @@ Plutus is built around the following production guarantees:
 ###### 8. SaaS Platform Analytics
 **Use Case:** Product usage tracking for B2B SaaS
 
-**Events:** feature_used, user_invited, dashboard_viewed, export_triggered
+**Events:** > feature_used, user_invited, dashboard_viewed, export_triggered
 
 **Processing:**
 
@@ -196,6 +196,7 @@ Plutus/
 ```
 
 ### 🛠️ Tech Stack
+
 
 **Language & Framework**
 - Python 3.12
@@ -295,7 +296,7 @@ The worker:
 
 Run manually (outside Docker):
 
-python -m workers.consumer
+`python -m workers.consumer`
 
 ## Testing
 
