@@ -105,3 +105,49 @@ Please follow these guidelines:
 
 - Use type hints consistently
 
+### Formatting & Style
+- Follow PEP 8
+
+- Use black for formatting
+
+- Use ruff or flake8 for linting (if configured)
+
+- Write meaningful commit messages
+
+## Database & Migrations
+
+- All schema changes must go through Alembic migrations
+
+- Do not modify existing migrations
+
+- New features requiring schema changes must include migrations
+
+### Testing
+
+
+###### Required Tests
+
+All contributions should include appropriate tests.
+
+**Unit tests** for:
+
+- Idempotency logic
+
+- Payload validation
+
+- Business rules
+
+**Integration tests** for:
+
+- API → DB → Worker flow
+
+- Failure and retry scenarios
+
+Run tests with:
+
+> pytest
+
+---
+
+
+
